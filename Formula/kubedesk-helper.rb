@@ -12,7 +12,7 @@ class KubedeskHelper < Formula
   desc "Helper service for KubeDesk - Exec-based auth for Kubernetes cloud providers"
   homepage "https://github.com/KubeDeskPro/kubedesk-helper"
   url "https://github.com/KubeDeskPro/kubedesk-helper/releases/download/v1.0.3/kubedesk-helper-1.0.3-arm64.tar.gz"
-  sha256 "REPLACE_WITH_ACTUAL_SHA256_AFTER_BUILDING"
+  sha256 "895cc21221f247575bd030c17e57d694a5114e3f0d4e75c714d6e18f682b45c5"
   version "1.0.3"
   license "MIT"
 
