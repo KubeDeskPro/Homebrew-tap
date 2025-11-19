@@ -9,69 +9,71 @@
 #   brew install kubedesk-helper
 
 class KubedeskHelper < Formula
-  desc "Helper service for KubeDesk - Exec-based auth for Kubernetes cloud providers"
-  homepage "https://github.com/KubeDeskPro/kubedesk-helper"
-  url "https://github.com/KubeDeskPro/kubedesk-helper/releases/download/v1.0.3/kubedesk-helper-1.0.3-arm64.tar.gz"
-  sha256 "895cc21221f247575bd030c17e57d694a5114e3f0d4e75c714d6e18f682b45c5"
-  version "1.0.3"
+  desc "Helper service for KubeDesk - Kubernetes management for macOS"
+  homepage "https://github.com/kubedeskpro/kubedesk-helper"
+  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.0.0/kubedesk-helper-2.0.0.tar.gz"
+  sha256 "ad8ed43b5b90a65b928f34060741e5a856f6bcee8159554387592729d9b21571"
+  version "2.0.0"
   license "MIT"
 
   depends_on :macos
-  depends_on arch: :arm64
 
   def install
+    # Install the pre-built binary
     bin.install "kubedesk-helper"
-    
-    # Install LaunchAgent plist
-    (var/"log").mkpath
-    
-    # Create plist with correct paths
-    plist_content = <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-          <key>Label</key>
-          <string>com.kubedesk.helper</string>
-          
-          <key>ProgramArguments</key>
-          <array>
-              <string>#{bin}/kubedesk-helper</string>
-          </array>
-          
-          <key>RunAtLoad</key>
-          <true/>
-          
-          <key>KeepAlive</key>
-          <true/>
-          
-          <key>StandardOutPath</key>
-          <string>#{var}/log/kubedesk-helper.log</string>
-          
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/kubedesk-helper-error.log</string>
-          
-          <key>WorkingDirectory</key>
-          <string>/tmp</string>
-      </dict>
-      </plist>
-    EOS
-    
-    (buildpath/"com.kubedesk.helper.plist").write plist_content
+
+    # Create log directory
+    (var/"log/kubedesk-helper").mkpath
   end
 
   service do
     run [opt_bin/"kubedesk-helper"]
     keep_alive true
-    log_path var/"log/kubedesk-helper.log"
-    error_log_path var/"log/kubedesk-helper-error.log"
-    working_dir "/tmp"
+    log_path var/"log/kubedesk-helper/stdout.log"
+    error_log_path var/"log/kubedesk-helper/stderr.log"
+  end
+
+  def caveats
+    <<~EOS
+      KubeDesk Helper v2.0.0 has been installed!
+
+      To start the helper service now and restart at login:
+        brew services start kubedesk-helper
+
+      Or, if you don't want/need a background service:
+        #{opt_bin}/kubedesk-helper
+
+      The helper runs on port 47823 and provides:
+        - kubectl command execution
+        - Exec-based authentication (AWS EKS, GCP GKE, Azure AKS)
+        - Port-forwarding sessions
+        - Exec into pods
+        - kubectl proxy
+
+      Logs are available at:
+        #{var}/log/kubedesk-helper/
+
+      Test the helper:
+        curl http://localhost:47823/health
+    EOS
   end
 
   test do
-    # Test that the binary exists and is executable
-    assert_predicate bin/"kubedesk-helper", :exist?
-    assert_predicate bin/"kubedesk-helper", :executable?
+    # Start the helper in background
+    pid = fork do
+      exec bin/"kubedesk-helper"
+    end
+
+    sleep 2
+
+    # Test health endpoint
+    output = shell_output("curl -s http://localhost:47823/health")
+    assert_match "2.0.0", output
+    assert_match "ok", output
+
+    # Clean up
+    Process.kill("TERM", pid)
+    Process.wait(pid)
   end
 end
 
