@@ -31,6 +31,7 @@ class KubedeskHelper < Formula
     keep_alive true
     log_path var/"log/kubedesk-helper/stdout.log"
     error_log_path var/"log/kubedesk-helper/stderr.log"
+    environment_variables PATH: std_service_path_env
   end
 
   def caveats
