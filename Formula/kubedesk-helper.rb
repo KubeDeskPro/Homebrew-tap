@@ -11,9 +11,9 @@
 class KubedeskHelper < Formula
   desc "Helper service for KubeDesk - Kubernetes management for macOS"
   homepage "https://github.com/kubedeskpro/kubedesk-helper"
-  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.0.0/kubedesk-helper-2.0.0.tar.gz"
-  sha256 "ad8ed43b5b90a65b928f34060741e5a856f6bcee8159554387592729d9b21571"
-  version "2.0.0"
+  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.1.0/kubedesk-helper-2.1.0.tar.gz"
+  sha256 "2070d22e3099f0179c7c7509bf662c29e2f05e822187f1b8204b103cb1c1ea24"
+  version "2.1.0"
   license "MIT"
 
   depends_on :macos
@@ -36,7 +36,7 @@ class KubedeskHelper < Formula
 
   def caveats
     <<~EOS
-      KubeDesk Helper v2.0.0 has been installed!
+      KubeDesk Helper v2.1.0 has been installed!
 
       To start the helper service now and restart at login:
         brew services start kubedesk-helper
@@ -69,7 +69,7 @@ class KubedeskHelper < Formula
 
     # Test health endpoint
     output = shell_output("curl -s http://localhost:47823/health")
-    assert_match "2.0.0", output
+    assert_match "2.1.0", output
     assert_match "ok", output
 
     # Clean up
