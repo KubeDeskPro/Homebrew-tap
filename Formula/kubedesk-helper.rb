@@ -11,9 +11,9 @@
 class KubedeskHelper < Formula
   desc "Helper service for KubeDesk - Kubernetes management for macOS"
   homepage "https://github.com/kubedeskpro/kubedesk-helper"
-  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.1.7/kubedesk-helper-2.1.6.tar.gz"
+  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.1.7/kubedesk-helper-2.1.7.tar.gz"
   sha256 "0d6d7949a3f656e349954fbdf2cfa4234560029d498eddd8d8f0d455cb41a473"
-  version "2.1.6"
+  version "2.1.7"
   license "MIT"
 
   depends_on :macos
@@ -69,7 +69,7 @@ class KubedeskHelper < Formula
 
     # Test health endpoint
     output = shell_output("curl -s http://localhost:47823/health")
-    assert_match "2.1.6", output
+    assert_match "2.1.7", output
     assert_match "ok", output
 
     # Clean up
