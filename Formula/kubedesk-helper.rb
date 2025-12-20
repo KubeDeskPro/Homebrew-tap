@@ -11,8 +11,8 @@
 class KubedeskHelper < Formula
   desc "Helper service for KubeDesk - Kubernetes management for macOS"
   homepage "https://github.com/kubedeskpro/kubedesk-helper"
-  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.1.6/kubedesk-helper-2.1.6.tar.gz"
-  sha256 "38c084d2bad547cc1e29cbc3fab6dd57227cfeb467c2221d377bb96edca678b0"
+  url "https://github.com/kubedeskpro/kubedesk-helper/releases/download/v2.1.7/kubedesk-helper-2.1.6.tar.gz"
+  sha256 "0d6d7949a3f656e349954fbdf2cfa4234560029d498eddd8d8f0d455cb41a473"
   version "2.1.6"
   license "MIT"
 
@@ -36,7 +36,7 @@ class KubedeskHelper < Formula
 
   def caveats
     <<~EOS
-      KubeDesk Helper v2.1.6 has been installed!
+      KubeDesk Helper v2.1.7 has been installed!
 
       To start the helper service now and restart at login:
         brew services start kubedesk-helper
